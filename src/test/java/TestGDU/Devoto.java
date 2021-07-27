@@ -1,4 +1,4 @@
-package GDU;
+package TestGDU;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -11,16 +11,7 @@ import com.github.javafaker.Faker;
 
 import java.util.concurrent.TimeUnit;
 
-public class Devoto {
-
-    WebDriver driver;
-    @BeforeTest
-    public void setup1(){
-        System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-    }
+public class Devoto extends BaseTest{
 
     @BeforeClass
     public void inicializarUrlDevoto(){
@@ -51,7 +42,7 @@ public class Devoto {
         //driver.findElement(By.xpath("//*[@href='/frescos/frutas-y-verduras']")).click();
         int cantBanana;
         for (cantBanana=0; cantBanana < 49; cantBanana++){
-            driver.findElement(By.xpath("//*[@class='Multiplier-button js-btn-mas listing']")).click();
+            driver.findElement(By.xpath("//*[@class='Multiplier-button js-btn-mas listing'][2]")).click();
         }
         driver.findElement(By.xpath("//*[@class='Button js-btn-agregar listing']"))  .click();
         driver.findElement(By.id("btnMiniCart")).click();
@@ -63,14 +54,12 @@ public class Devoto {
         //String direccion = faker_data.address().streetAddress();
         //String nropuerta = faker_data.address().buildingNumber();
         //String nropuiso = faker_data.address().streetAddressNumber();
-
         driver.findElement(By.id("client-first-name")).sendKeys(nombre);
         driver.findElement(By.id("client-last-name")).sendKeys(apellido);
         driver.findElement(By.id("client-document")).sendKeys("61732624");
         driver.findElement(By.id("client-phone")).sendKeys("095421236");
         driver.findElement(By.xpath("//*[@class='submit btn btn-large btn-success']")).click();
-        // driver.findElement(By.className("btn js-cerrar-mensaje-bolsas")).click();
-        //driver.findElement(By.xpath("//*[@class='shp-method-option-text']")).click();
+        driver.findElement(By.xpath("//button[@class='btn js-cerrar-mensaje-bolsas']")).click();
         driver.findElement(By.className("pac-target-input")).sendKeys("Avenida Doctor Francisco Soca 1318, entre Charrúa, 11300 Montevideo");
     }
 }
