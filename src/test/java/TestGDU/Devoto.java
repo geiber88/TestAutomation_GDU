@@ -1,5 +1,8 @@
 package TestGDU;
 
+import UI.Devoto.DevotoHomePage;
+import UI.Devoto.DevotoLandingPage;
+import UI.Devoto.DevotoLoginPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
@@ -20,18 +23,17 @@ public class Devoto extends BaseTest{
 
     @BeforeMethod
     public void AutenticacionDevoto()  {
-        WebElement Sucursal = driver.findElement(By.id("selec-suc-popup"));
-        Select SucursalSeleccionada = new Select(Sucursal);
-        SucursalSeleccionada.selectByValue("3");
-        driver.findElement(By.id("btnConfirmaSucursal")).click();
-        driver.findElement(By.id("btnMiPerfil")).click();
-        driver.findElement(By.className("perfil-desktop")).click();
-        driver.navigate().to("https://www.devoto.com.uy/login");
-        //driver.findElement(By.xpath("//*[@href='/_secure/account']")).click();
-        driver.findElement(By.id("loginWithUserAndPasswordBtn")).click();
-        driver.findElement(By.id("inputEmail")).sendKeys("grey@disco.com.uy");
-        driver.findElement(By.id("inputPassword")).sendKeys("Internet0.");
-        driver.findElement(By.id("classicLoginBtn")).click();
+        //Page 1 Pagina para seleccionar Dpto Landing
+        DevotoLandingPage devotoLandingPage=new DevotoLandingPage(driver);
+        devotoLandingPage.sucursal();
+        DevotoHomePage devotoHomePage=devotoLandingPage.clickOnButton();
+        //Page 2   Home
+        devotoHomePage.clickBtnID("btnMiPerfil");
+        DevotoLoginPage devotoLoginPage=devotoHomePage.clickOnMiCuenta();
+        //Page 3   Login
+        devotoLoginPage.clickBtnID("loginWithUserAndPasswordBtn");
+        devotoLoginPage.fillingRegistration();
+        devotoLoginPage.clickBtnID("classicLoginBtn");
 
     }
     @Test
