@@ -1,4 +1,4 @@
-package GDU;
+package TestGDU;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -12,22 +12,14 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.Thread.*;
 
-public class Disco {
+public class Disco extends BaseTest {
 
-    WebDriver driver;
 
-    @BeforeTest
-    public void setup(){
-        System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-    }
     @BeforeClass
     public void inicializarUrlDisco(){
         driver.get("https://www.disco.com.uy/");
     }
-    //Método que permite seleccionar la Sucursal//
+
     @BeforeMethod
     public void AutenticacionDisco()  {
         WebElement Sucursal = driver.findElement(By.id("selec-suc-popup"));

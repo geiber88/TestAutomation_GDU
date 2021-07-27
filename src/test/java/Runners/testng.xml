@@ -2,8 +2,8 @@
     <parameter name="tagName" value="h1"></parameter>
     <test name="Test GDU">
         <classes>
-            <class name="GDU.Disco"></class>
-            <class name="GDU.Devoto"></class>
+            <class name="TestGDU.Disco"></class>
+            <class name="TestGDU.Devoto"></class>
         </classes>
     </test>
 </suite>
