@@ -1,28 +1,38 @@
 package TestGDU;
 
-import com.github.javafaker.Faker;
+import UI.Devoto.DevotoHomePage;
+import UI.Devoto.DevotoLandingPage;
+import UI.Devoto.DevotoLoginPage;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
-import org.testng.annotations.*;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import com.github.javafaker.Faker;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static java.lang.Thread.*;
-
-public class Disco extends BaseTest {
-
+public class Geant extends BaseTest{
 
     @BeforeClass
     public void inicializar_Url_Disco(){
-        driver.get("https://www.disco.com.uy/");
+        driver.get("https://www.geant.com.uy/");
     }
 
     @BeforeMethod
-    public void Autenticacion_Disco()  {
+    public void Autenticacion_Geant() throws InterruptedException {
+        driver.findElement(By.xpath("(//button[@class='jss7 jss19 custom-root jss21 jss24 styles__Button-bhlbst-0 kAGoCB styles__Wrapper-sc-42ogtn-0 kGPgYa'])[1]")).click();
+        Thread.sleep(3000);
+        WebElement address = driver.findElement(By.xpath("//input[@class='jss68 jss53 native-input']"));
+        Thread.sleep(1000);
+        address.click();
+        Thread.sleep(1000);
+        address.sendKeys("Rambla Republica Argentina 1205 Barrio Sur Montevideo");
+
+        driver.findElement(By.xpath("//span[@class='jss20 button-label']")).click();
+
         WebElement Sucursal = driver.findElement(By.id("selec-suc-popup"));
         Select SucursalSeleccionada = new Select(Sucursal);
         SucursalSeleccionada.selectByValue("4");
@@ -39,12 +49,9 @@ public class Disco extends BaseTest {
         driver.findElement(By.id("classicLoginBtn")).click();
     }
     @Test
-    public void Comprar_Disco() throws InterruptedException {
+    public void Comprar_Geant() throws InterruptedException {
         Thread.sleep(5000);
-        driver.navigate().to("https://www.disco.com.uy/frescos/frutas-y-verduras");
-        Thread.sleep(5000);
-        JavascriptExecutor jsExecuter = (JavascriptExecutor)driver;
-        jsExecuter.executeScript("window.scrollBy(0,500)");
+        driver.navigate().to("https://www.devoto.com.uy/frescos/frutas-y-verduras");
         Thread.sleep(5000);
         //mapa clave-valor de productos agregados a la compra, donde la clave es el nombre del producto y el valor su cantidad
         Map<String, Integer> itemsSelecList = new HashMap<String, Integer>();
@@ -55,64 +62,57 @@ public class Disco extends BaseTest {
         //lista de botones agregar
         List<WebElement> addButtons = driver.findElements(By.xpath("//span[text()='Agregar']"));
         // cantidad de productos a agregar
-        Integer productsCount = 5;
+        Integer productsCount = 10;
         Integer count = productsCount;
         if(productsCount > products.size()) {
             count = products.size();
-            Thread.sleep(2000);
+            Thread.sleep(3000);
         }
         for (int i=0; i< count; i++) {
             String productName = products.get(i).getText();
             // esta seria la cantidad para el producto que se genera aleatorio entre 1 y 10
-            Integer productCount = (int)(Math.random()*(9-5+1)+5);
+            Integer productCount = (int)(Math.random()*(20-10+1)+10);
 
-            //Integer productCount;
+            //Integer productCount = 14;
             for(int j=0; j< productCount; j++){
                 plusButtons.get(i).click();
                 Thread.sleep(500);
             }
             addButtons.get(i).click();
             // al final quedaran en este mapa los nombres de productos y cantidades agregados a la compra por si te hace falta saberlos
-           itemsSelecList.put(productName, productCount);
+            itemsSelecList.put(productName, productCount);
         }
+        //driver.findElement(By.xpath("//button[@class='Multiplier-button js-btn-mas listing']")).click();
+
         driver.findElement(By.id("btnMiniCart")).click();
         Thread.sleep(1000);
         driver.findElement(By.id("btn-finalizar-compra")).click();
         Thread.sleep(1000);
         driver.findElement(By.id("cart-to-orderform")).click();
         Thread.sleep(1000);
-        driver.findElement(By.xpath("//button[@class='btn js-cerrar-mensaje-bolsas']")).click();
-        Thread.sleep(3000);
-        driver.findElement(By.id("client-first-name")).click();
-        Thread.sleep(1000);
-        driver.findElement(By.id("client-first-name")).sendKeys("Prueba Web");
-        Thread.sleep(3000);
-        driver.findElement(By.id("client-first-name")).sendKeys("Prueba Web");
-        Thread.sleep(3000);
-        driver.findElement(By.id("client-last-name")).sendKeys("Soporte");
-        Thread.sleep(3000);
-        WebElement cldocument = driver.findElement(By.id("client-document"));
-        Thread.sleep(3000);
-        cldocument.sendKeys("61732624");
+
+        Faker faker_data = new Faker();
+        String firstName = faker_data.name().firstName();
+        String lastName = faker_data.name().lastName();
+        String buildingNum = faker_data.address().buildingNumber();
+        String streetNumber = faker_data.address().streetAddressNumber();
+
+        driver.findElement(By.id("client-first-name")).sendKeys(firstName);
+        driver.findElement(By.id("client-last-name")).sendKeys(lastName);
+        driver.findElement(By.id("client-document")).sendKeys("61732624");
         driver.findElement(By.id("client-phone")).sendKeys("095421236");
-        Thread.sleep(1000);
-        driver.findElement(By.id("go-to-shipping")).click();
-        Thread.sleep(1000);
-        driver.findElement(By.id("shipping-option-pickup-in-point")).click();
-        Thread.sleep(1000);
-        driver.findElement(By.id("find-pickups-manualy-button")).click();
-        Thread.sleep(1000);
+        driver.findElement(By.xpath("//*[@class='submit btn btn-large btn-success']")).click();
+        driver.findElement(By.xpath("//button[@class='btn js-cerrar-mensaje-bolsas']")).click();
+        driver.findElement(By.className("pac-target-input")).click();
         WebElement deliveryAddress = driver.findElement(By.className("pac-target-input"));
-        Thread.sleep(1000);
-        deliveryAddress.sendKeys("Disco Fresh Market 8 de octubre");
-        Thread.sleep(1000);
+        deliveryAddress.sendKeys("Rambla República Argentina");
+        Thread.sleep(2000);
         deliveryAddress.sendKeys(Keys.ARROW_DOWN);
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         deliveryAddress.sendKeys(Keys.ENTER);
-        Thread.sleep(1000);
-        driver.findElement(By.xpath("(//div[@class='vtex-pickup-points-modal-3-x-pickupPointInfo pkpmodal-pickup-point-info'])[1]")).click();
-        Thread.sleep(1000);
-        driver.findElement(By.xpath("//button[text()='Recogida en este punto']")).click();
+        driver.findElement(By.id("ship-number")).sendKeys(buildingNum);
+        Thread.sleep(2000);
+        driver.findElement(By.id("ship-complement")).sendKeys(streetNumber);
         Thread.sleep(2000);
         WebElement selectDay = driver.findElement(By.xpath("//button[@class='vtex-omnishipping-1-x-dateLink shp-datepicker-button scheduled-delivery-choose']"));
         selectDay.click();
@@ -129,10 +129,32 @@ public class Disco extends BaseTest {
         }
         Thread.sleep(5000);
         driver.findElement(By.xpath("(//*[@id='payment-data-submit'])[2]")).click();
-    }
-    @AfterMethod
-    public void closeDriver() throws InterruptedException {
-        Thread.sleep(4000);
-        driver.close();
+        // driver.findElement(By.cssSelector("(#payment-data-submit)[2]")).click();
+
+
+        driver.findElement(By.id("Titular")).sendKeys(firstName);
+
+        driver.findElement(By.id("cardNumber")).sendKeys("4453488777784597");
+
+        driver.findElement(By.id("expirationTxtBox")).sendKeys("09/22");
+
+        driver.findElement(By.id("cvvTextBox")).sendKeys("096");
+
+    /*
+        List<WebElement> products = driver.findElements(By.cssSelector("h3.Product-title"));
+            for (int i = 0; i < products.size(); i++) {
+                String name = products.get(i).getText();
+                    if (name.contains("Frutilla")) {
+                        List<WebElement> buttonAdd = driver.findElements(By.xpath("//span[text()='Agregar']"));
+                        buttonAdd.get(i).click();
+                        break;
+                    }
+            }
+        for(int i=0; i<9; i++){
+            WebElement addElements = driver.findElement(By.xpath("//button[@class='Multiplier-button js-btn-mas listing']"));
+            Thread.sleep(3000);
+            addElements.click();
+        }
+    */
     }
 }
