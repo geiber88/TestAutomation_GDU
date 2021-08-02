@@ -41,7 +41,7 @@ public class Devoto extends BaseTest{
         driver.navigate().to("https://www.devoto.com.uy/frescos/frutas-y-verduras");
         Thread.sleep(5000);
         JavascriptExecutor jsExecuter = (JavascriptExecutor)driver;
-        jsExecuter.executeScript("window.scrollBy(0,200)");
+        jsExecuter.executeScript("window.scrollBy(0,150)");
         Thread.sleep(5000);
         //mapa clave-valor de productos agregados a la compra, donde la clave es el nombre del producto y el valor su cantidad
         Map<String, Integer> itemsSelecList = new HashMap<String, Integer>();
@@ -62,7 +62,7 @@ public class Devoto extends BaseTest{
         for (int i=0; i< count; i++) {
             String productName = products.get(i).getText();
             // esta seria la cantidad para el producto que se genera aleatorio entre 1 y 10
-            Integer productCount = (int)(Math.random()*(20-10+1)+10);
+            Integer productCount = (int)(Math.random()*(10-5+1)+5);
 
             //Integer productCount = 14;
             for(int j=0; j< productCount; j++){
@@ -83,10 +83,10 @@ public class Devoto extends BaseTest{
         Thread.sleep(1000);
 
         Faker faker_data = new Faker();
-      //  String firstName = faker_data.name().firstName();
+       // String firstName = faker_data.name().firstName();
        // String lastName = faker_data.name().lastName();
-        String buildingNum = faker_data.address().buildingNumber();
-        String streetNumber = faker_data.address().streetAddressNumber();
+       // String buildingNum = faker_data.address().buildingNumber();
+       // String streetNumber = faker_data.address().streetAddressNumber();
 
         driver.findElement(By.id("client-first-name")).sendKeys("Prueba Web");
         driver.findElement(By.id("client-last-name")).sendKeys("Soporte");
@@ -96,15 +96,15 @@ public class Devoto extends BaseTest{
         driver.findElement(By.xpath("//button[@class='btn js-cerrar-mensaje-bolsas']")).click();
         driver.findElement(By.className("pac-target-input")).click();
         WebElement deliveryAddress = driver.findElement(By.className("pac-target-input"));
-        deliveryAddress.sendKeys("Rambla República Argentina");
+        deliveryAddress.sendKeys("Rambla República Argentina 1205 apartamento 1507 Barrio Sur Montevideo");
         Thread.sleep(2000);
         deliveryAddress.sendKeys(Keys.ARROW_DOWN);
         Thread.sleep(2000);
         deliveryAddress.sendKeys(Keys.ENTER);
-        driver.findElement(By.id("ship-number")).sendKeys(buildingNum);
-        Thread.sleep(2000);
-        driver.findElement(By.id("ship-complement")).sendKeys(streetNumber);
-        Thread.sleep(2000);
+        //driver.findElement(By.id("ship-number")).sendKeys("1205");
+       // Thread.sleep(2000);
+       // driver.findElement(By.id("ship-complement")).sendKeys("1507");
+       // Thread.sleep(2000);
         WebElement selectDay = driver.findElement(By.xpath("//button[@class='vtex-omnishipping-1-x-dateLink shp-datepicker-button scheduled-delivery-choose']"));
         selectDay.click();
         selectDay.sendKeys(Keys.ENTER);
@@ -118,18 +118,19 @@ public class Devoto extends BaseTest{
         if (radioSustituto.isSelected()==false){
             radioSustituto.click();
         }
-        Thread.sleep(5000);
+        Thread.sleep(3000);
         driver.findElement(By.xpath("(//*[@id='payment-data-submit'])[2]")).click();
        // driver.findElement(By.cssSelector("(#payment-data-submit)[2]")).click();
 
-
+        driver.switchTo().frame("custom_iframe");
         driver.findElement(By.id("Titular")).sendKeys("Prueba Web Soporte");
-
-        driver.findElement(By.id("cardNumber")).sendKeys("4453488777784597");
-
-        driver.findElement(By.id("expirationTxtBox")).sendKeys("09/22");
-
+        Thread.sleep(3000);
+        driver.findElement(By.xpath("//input[@id='cardNumber']")).sendKeys("4453488777784597");
+        //driver.findElement(By.xpath("//input[@autocomplete='cc-number']")).sendKeys("4453488777784597");
+        driver.findElement(By.id("expirationTxtBox")).sendKeys("0922");
         driver.findElement(By.id("cvvTextBox")).sendKeys("096");
+        //Thread.sleep(2000);
+        driver.findElement(By.xpath("(//*[@id='btnPay']) ")).click();
 
     /*
         List<WebElement> products = driver.findElements(By.cssSelector("h3.Product-title"));

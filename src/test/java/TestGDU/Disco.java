@@ -130,9 +130,9 @@ public class Disco extends BaseTest {
         Thread.sleep(5000);
         driver.findElement(By.xpath("(//*[@id='payment-data-submit'])[2]")).click();
     }
-    @AfterMethod
+   /* @AfterMethod
     public void closeDriver() throws InterruptedException {
         Thread.sleep(4000);
         driver.close();
-    }
+    }*/
 }

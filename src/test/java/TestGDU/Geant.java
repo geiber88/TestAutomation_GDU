@@ -23,42 +23,37 @@ public class Geant extends BaseTest{
 
     @BeforeMethod
     public void Autenticacion_Geant() throws InterruptedException {
+        driver.findElement(By.xpath("/html/body/w-div/span")).click();
         driver.findElement(By.xpath("(//button[@class='jss7 jss19 custom-root jss21 jss24 styles__Button-bhlbst-0 kAGoCB styles__Wrapper-sc-42ogtn-0 kGPgYa'])[1]")).click();
+        WebElement addressStore = driver.findElement(By.xpath(("(//input[@class='jss68 jss53 native-input'])[3]")));
+        addressStore.sendKeys("Rambla República Argentina 1205 apartamento 1507 Barrio Sur Montevideo");
+        Thread.sleep(1000);
+        addressStore.sendKeys(Keys.ARROW_DOWN);
+        addressStore.sendKeys(Keys.ENTER);
+        Thread.sleep(1000);
+        driver.findElement(By.xpath("//button[@class='jss7 jss19 custom-root jss30 jss31 jss33 jss34 styles__Button-bhlbst-0 kAGoCB styles__Button-sc-1xkqa5v-6 eKifnE']")).click();
         Thread.sleep(3000);
-        WebElement address = driver.findElement(By.xpath("//input[@class='jss68 jss53 native-input']"));
-        Thread.sleep(1000);
-        address.click();
-        Thread.sleep(1000);
-        address.sendKeys("Rambla Republica Argentina 1205 Barrio Sur Montevideo");
-
-        driver.findElement(By.xpath("//span[@class='jss20 button-label']")).click();
-
-        WebElement Sucursal = driver.findElement(By.id("selec-suc-popup"));
-        Select SucursalSeleccionada = new Select(Sucursal);
-        SucursalSeleccionada.selectByValue("4");
-        driver.findElement(By.id("btnConfirmaSucursal")).click();
-        driver.findElement(By.id("btnMiPerfil")).click();
-        driver.findElement(By.className("perfil-desktop")).click();
-        driver.navigate().to("https://www.disco.com.uy/login");
-        //driver.findElement(By.id("MiPerfil")).click();
-        //driver.findElement(By.xpath("//*[@href='/_secure/account']")).click();
-        //driver.findElement(By.className("perfil-desktop")).click();
+        driver.findElement(By.xpath("//button[@class='jss7 jss19 custom-root jss21 jss24 styles__Button-bhlbst-0 kAGoCB styles__Button-xqo98n-0 ftWIgs']")).click();
+        driver.findElement(By.xpath("//button[@class='jss7 jss19 custom-root jss21 jss24 styles__Button-bhlbst-0 kAGoCB styles__Button-urqn1t-3 icYDKy']")).click();
         driver.findElement(By.id("loginWithUserAndPasswordBtn")).click();
         driver.findElement(By.id("inputEmail")).sendKeys("grey@disco.com.uy");
         driver.findElement(By.id("inputPassword")).sendKeys("Internet0.");
         driver.findElement(By.id("classicLoginBtn")).click();
+        driver.findElement(By.xpath("(//button[@class='btn btn-large btn-success pull-right'])[1]"));
     }
     @Test
     public void Comprar_Geant() throws InterruptedException {
-        Thread.sleep(5000);
-        driver.navigate().to("https://www.devoto.com.uy/frescos/frutas-y-verduras");
+        Thread.sleep(2000);
+        driver.findElement(By.xpath("//button[@class='jss7 jss19 custom-root jss21 jss24 styles__Button-bhlbst-0 kAGoCB styles__Wrapper-sc-1osc43k-0 kPkfZV']")).click();
+        Thread.sleep(1000);
+        driver.navigate().to("https://www.geant.com.uy/frescos");
         Thread.sleep(5000);
         //mapa clave-valor de productos agregados a la compra, donde la clave es el nombre del producto y el valor su cantidad
         Map<String, Integer> itemsSelecList = new HashMap<String, Integer>();
         // lista de productos
-        List<WebElement> products = driver.findElements(By.cssSelector("h3.Product-title"));
+        List<WebElement> products = driver.findElements(By.cssSelector("p.styles__Brand-sc-1oqmf3r-0 fExUwT styles__Brand-tbq658-13 fHVoCq"));
         // lista de botones +
-        List<WebElement> plusButtons = driver.findElements(By.xpath("//button[@class='Multiplier-button js-btn-mas listing']"));
+        List<WebElement> plusButtons = driver.findElements(By.xpath("//button[@class='jss36 jss73 styles__IconButton-q0mhzs-0 cjbrvb styles__QuantityButtonBase-sc-8x7pwc-0 styles__Plus-sc-8x7pwc-2 dIaBSD']"));
         //lista de botones agregar
         List<WebElement> addButtons = driver.findElements(By.xpath("//span[text()='Agregar']"));
         // cantidad de productos a agregar
@@ -69,16 +64,15 @@ public class Geant extends BaseTest{
             Thread.sleep(3000);
         }
         for (int i=0; i< count; i++) {
+            addButtons.get(i).click();
             String productName = products.get(i).getText();
             // esta seria la cantidad para el producto que se genera aleatorio entre 1 y 10
             Integer productCount = (int)(Math.random()*(20-10+1)+10);
-
             //Integer productCount = 14;
             for(int j=0; j< productCount; j++){
                 plusButtons.get(i).click();
                 Thread.sleep(500);
             }
-            addButtons.get(i).click();
             // al final quedaran en este mapa los nombres de productos y cantidades agregados a la compra por si te hace falta saberlos
             itemsSelecList.put(productName, productCount);
         }
