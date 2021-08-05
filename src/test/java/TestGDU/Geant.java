@@ -43,21 +43,27 @@ public class Geant extends BaseTest{
     }
     @Test
     public void Comprar_Geant() throws InterruptedException {
-        Thread.sleep(2000);
-        driver.findElement(By.xpath("//button[@class='jss7 jss19 custom-root jss21 jss24 styles__Button-bhlbst-0 kAGoCB styles__Wrapper-sc-1osc43k-0 kPkfZV']")).click();
+      //  Thread.sleep(1000);
+       // driver.findElement(By.xpath("//div[@class='styles__Wrapper-ids5ve-0 eTZxxO']")).click();
+       // Thread.sleep(1000);
+        driver.navigate().to("https://www.geant.com.uy/perfumeria-y-limpieza");
         Thread.sleep(1000);
-        driver.navigate().to("https://www.geant.com.uy/frescos");
-        Thread.sleep(5000);
+        /*driver.findElement(By.xpath("(//div[@class='styles__Wrapper-hkhrxq-0 gtSLAe styles__AddToCart-tbq658-2 kwbema'])[1]")).click();
+        System.out.println("Boton agregar");
+        Thread.sleep(2000);
+        driver.findElement(By.xpath("//button[@class='jss36 jss73 styles__IconButton-q0mhzs-0 cjbrvb styles__QuantityButtonBase-sc-8x7pwc-0 styles__Plus-sc-8x7pwc-2 dIaBSD']")).click();
+        System.out.println("Boton +");
+        */
+
         //mapa clave-valor de productos agregados a la compra, donde la clave es el nombre del producto y el valor su cantidad
         Map<String, Integer> itemsSelecList = new HashMap<String, Integer>();
         // lista de productos
-        List<WebElement> products = driver.findElements(By.cssSelector("p.styles__Brand-sc-1oqmf3r-0 fExUwT styles__Brand-tbq658-13 fHVoCq"));
-        // lista de botones +
-        List<WebElement> plusButtons = driver.findElements(By.xpath("//button[@class='jss36 jss73 styles__IconButton-q0mhzs-0 cjbrvb styles__QuantityButtonBase-sc-8x7pwc-0 styles__Plus-sc-8x7pwc-2 dIaBSD']"));
-        //lista de botones agregar
-        List<WebElement> addButtons = driver.findElements(By.xpath("//span[text()='Agregar']"));
+        List<WebElement> products = driver.findElements(By.xpath("//*[@class='styles__Title-tbq658-14 ePkRgH']"));
+        // lista de botones agregar
+        List<WebElement> addButtons = driver.findElements(By.xpath("//div[@class='styles__Wrapper-hkhrxq-0 gtSLAe styles__AddToCart-tbq658-2 kwbema']"));
+
         // cantidad de productos a agregar
-        Integer productsCount = 10;
+        Integer productsCount = 5;
         Integer count = productsCount;
         if(productsCount > products.size()) {
             count = products.size();
@@ -65,48 +71,48 @@ public class Geant extends BaseTest{
         }
         for (int i=0; i< count; i++) {
             addButtons.get(i).click();
+            Thread.sleep(3000);
             String productName = products.get(i).getText();
-            // esta seria la cantidad para el producto que se genera aleatorio entre 1 y 10
-            Integer productCount = (int)(Math.random()*(20-10+1)+10);
-            //Integer productCount = 14;
-            for(int j=0; j< productCount; j++){
-                plusButtons.get(i).click();
-                Thread.sleep(500);
+            Integer productCount = (int)(Math.random()*(2-1+1)+1);
+            List<WebElement> plusButtons = driver.findElements(By.xpath("//button[@class='jss36 jss73 styles__IconButton-q0mhzs-0 cjbrvb styles__QuantityButtonBase-sc-8x7pwc-0 styles__Plus-sc-8x7pwc-2 dIaBSD']"));
+            Thread.sleep(3000);
+            for(int j=0; j< plusButtons.size(); j++){
+                for(int k=0; k< productCount; k++){
+                    plusButtons.get(i).click();
+                    Thread.sleep(3000);
+                }
             }
+
             // al final quedaran en este mapa los nombres de productos y cantidades agregados a la compra por si te hace falta saberlos
             itemsSelecList.put(productName, productCount);
         }
-        //driver.findElement(By.xpath("//button[@class='Multiplier-button js-btn-mas listing']")).click();
-
-        driver.findElement(By.id("btnMiniCart")).click();
+        driver.findElement(By.xpath("//button[@class='jss36 jss10 custom-root jss12 jss15 styles__Button-bhlbst-0 kAGoCB styles__Button-sc-1hiosjg-3 jlREgB']")).click();
         Thread.sleep(1000);
-        driver.findElement(By.id("btn-finalizar-compra")).click();
+        driver.findElement(By.xpath("//a[@class='jss36 jss10 custom-root jss21 jss22 jss24 jss25 styles__Button-bhlbst-0 kAGoCB styles__GoCheckoutButton-sc-1hiosjg-18 kqQGAo']")).click();
         Thread.sleep(1000);
-        driver.findElement(By.id("cart-to-orderform")).click();
-        Thread.sleep(1000);
+        WebElement radioSustituto = driver.findElement(By.xpath("(//input[@class='jss18'])[1]"));
+        if (radioSustituto.isSelected()==false){
+            radioSustituto.click();
+        }
+        //driver.findElement(By.xpath("//button[@class='styles__AddNote-sc-2ai53j-4 fClhcv']")).click();
+       // driver.findElement(By.xpath("//button[@class='styles__TextArea-sc-2ai53j-2 blCZll']")).sendKeys("Esto es una Prueba Web Soporte");
+        driver.findElement(By.xpath("//button[@class='jss25 jss58 custom-root jss69 jss70 jss72 jss73 styles__Button-bhlbst-0 kAGoCB styles__BaseButton-suauvr-0 styles__Checkout-suauvr-6 bDNVCl']")).click();
 
-        Faker faker_data = new Faker();
-        String firstName = faker_data.name().firstName();
-        String lastName = faker_data.name().lastName();
-        String buildingNum = faker_data.address().buildingNumber();
-        String streetNumber = faker_data.address().streetAddressNumber();
-
-        driver.findElement(By.id("client-first-name")).sendKeys(firstName);
-        driver.findElement(By.id("client-last-name")).sendKeys(lastName);
-        driver.findElement(By.id("client-document")).sendKeys("61732624");
-        driver.findElement(By.id("client-phone")).sendKeys("095421236");
-        driver.findElement(By.xpath("//*[@class='submit btn btn-large btn-success']")).click();
-        driver.findElement(By.xpath("//button[@class='btn js-cerrar-mensaje-bolsas']")).click();
-        driver.findElement(By.className("pac-target-input")).click();
+        //driver.findElement(By.xpath("(//input[@id='client-first-name'])[4]")).click();
+        driver.findElement(By.xpath("//input[@class='input-small error']")).sendKeys("Prueba Web");
+        driver.findElement(By.xpath("//input[@class='input-small']")).sendKeys("Soporte");
+        driver.findElement(By.xpath("(//input[@id='client-document'])[4]")).sendKeys("61732624");
+        driver.findElement(By.xpath("(//input[@id='client-phone'])[6]")).sendKeys("095421236");
+        driver.findElement(By.xpath("(//input[@id='go-to-shipping'])[2]")).click();
         WebElement deliveryAddress = driver.findElement(By.className("pac-target-input"));
-        deliveryAddress.sendKeys("Rambla República Argentina");
+        deliveryAddress.sendKeys("Rambla República Argentina 1205 Apto 1507 Barrio Sur, Montevideo");
         Thread.sleep(2000);
         deliveryAddress.sendKeys(Keys.ARROW_DOWN);
         Thread.sleep(2000);
         deliveryAddress.sendKeys(Keys.ENTER);
-        driver.findElement(By.id("ship-number")).sendKeys(buildingNum);
+       // driver.findElement(By.id("ship-number")).sendKeys(buildingNum);
         Thread.sleep(2000);
-        driver.findElement(By.id("ship-complement")).sendKeys(streetNumber);
+       // driver.findElement(By.id("ship-complement")).sendKeys(streetNumber);
         Thread.sleep(2000);
         WebElement selectDay = driver.findElement(By.xpath("//button[@class='vtex-omnishipping-1-x-dateLink shp-datepicker-button scheduled-delivery-choose']"));
         selectDay.click();
@@ -117,16 +123,9 @@ public class Geant extends BaseTest{
             radioCard.click();
         }
         Thread.sleep(3000);
-        WebElement radioSustituto = driver.findElement(By.xpath("//span[text()='No sustituir']"));
-        if (radioSustituto.isSelected()==false){
-            radioSustituto.click();
-        }
-        Thread.sleep(5000);
         driver.findElement(By.xpath("(//*[@id='payment-data-submit'])[2]")).click();
-        // driver.findElement(By.cssSelector("(#payment-data-submit)[2]")).click();
 
 
-        driver.findElement(By.id("Titular")).sendKeys(firstName);
 
         driver.findElement(By.id("cardNumber")).sendKeys("4453488777784597");
 

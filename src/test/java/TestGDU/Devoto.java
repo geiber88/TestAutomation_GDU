@@ -3,15 +3,10 @@ package TestGDU;
 import UI.Devoto.DevotoHomePage;
 import UI.Devoto.DevotoLandingPage;
 import UI.Devoto.DevotoLoginPage;
-import com.github.javafaker.CreditCardType;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.*;
 import com.github.javafaker.Faker;
-
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class Devoto extends BaseTest{
 
@@ -37,8 +32,10 @@ public class Devoto extends BaseTest{
     }
     @Test
     public void Comprar_Devoto() throws InterruptedException {
+
         Thread.sleep(5000);
-        driver.navigate().to("https://www.devoto.com.uy/frescos/frutas-y-verduras");
+        driver.navigate().to("https://www.devoto.com.uy/perfumeria-y-limpieza/perfumeria");
+        //Page new 1
         Thread.sleep(5000);
         JavascriptExecutor jsExecuter = (JavascriptExecutor)driver;
         jsExecuter.executeScript("window.scrollBy(0,150)");
@@ -62,7 +59,7 @@ public class Devoto extends BaseTest{
         for (int i=0; i< count; i++) {
             String productName = products.get(i).getText();
             // esta seria la cantidad para el producto que se genera aleatorio entre 1 y 10
-            Integer productCount = (int)(Math.random()*(10-5+1)+5);
+            Integer productCount = (int)(Math.random()*(1-1+1)+1);
 
             //Integer productCount = 14;
             for(int j=0; j< productCount; j++){
@@ -76,9 +73,12 @@ public class Devoto extends BaseTest{
             //driver.findElement(By.xpath("//button[@class='Multiplier-button js-btn-mas listing']")).click();
 
         driver.findElement(By.id("btnMiniCart")).click();
+
         Thread.sleep(1000);
         driver.findElement(By.id("btn-finalizar-compra")).click();
         Thread.sleep(1000);
+
+
         driver.findElement(By.id("cart-to-orderform")).click();
         Thread.sleep(1000);
 
