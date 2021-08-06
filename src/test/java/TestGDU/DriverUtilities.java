@@ -1,6 +1,7 @@
 package TestGDU;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 public class DriverUtilities {
@@ -10,6 +11,7 @@ public class DriverUtilities {
     public DriverUtilities(WebDriver remoteDriver){
         driver = remoteDriver;
     }
+    /*
     public void clickBtnXpath(String xpath){
         driver.findElement(By.xpath(xpath)).click();
     }
@@ -23,5 +25,7 @@ public class DriverUtilities {
     public void clickBtnName(String name){
         driver.findElement(By.name(name)).click();
     }
+
+     */
 
 }

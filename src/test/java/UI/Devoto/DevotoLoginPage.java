@@ -9,20 +9,13 @@ public class DevotoLoginPage extends BaseUITest {
     public DevotoLoginPage(WebDriver remoteDriver){
         driver = remoteDriver;
     }
-   /*
-    public void clickOnUserPass(){
-        driver.findElement(By.id("loginWithUserAndPasswordBtn")).click();
-    }
-    */
-
     public void fillingRegistration(){
         driver.findElement(By.id("inputEmail")).sendKeys("grey@disco.com.uy");
         driver.findElement(By.id("inputPassword")).sendKeys("Internet0.");
     }
-   /*
-    public void clickOnConfirmar(){
-        driver.findElement(By.id("classicLoginBtn")).click();
+    public DevotoProductSelection SelectProducts() {
+        driver.navigate().to("https://www.devoto.com.uy/perfumeria-y-limpieza/perfumeria");
+        DevotoProductSelection nextPage = new DevotoProductSelection(driver);
+        return nextPage;
     }
-   */
-
 }

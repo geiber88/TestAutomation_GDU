@@ -1,5 +1,7 @@
 package TestGDU;
 
+import UI.Devoto.*;
+import UI.Disco.*;
 import com.github.javafaker.Faker;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -17,36 +19,58 @@ public class Disco extends BaseTest {
 
 
     @BeforeClass
-    public void inicializar_Url_Disco(){
+    public void inicializarUrlDisco(){
         driver.get("https://www.disco.com.uy/");
     }
 
     @BeforeMethod
-    public void Autenticacion_Disco()  {
-        WebElement Sucursal = driver.findElement(By.id("selec-suc-popup"));
+    public void AutenticacionDisco()  {
+        //Page 1 Pagina para seleccionar Dpto Landing
+        DiscoLandingPage discoLandingPage = new DiscoLandingPage(driver);
+        discoLandingPage.selectStore();
+        DiscoHomePage discoHomePage = discoLandingPage.clickOnButton();
+        /* WebElement Sucursal = driver.findElement(By.id("selec-suc-popup"));
         Select SucursalSeleccionada = new Select(Sucursal);
-        SucursalSeleccionada.selectByValue("4");
-        driver.findElement(By.id("btnConfirmaSucursal")).click();
-        driver.findElement(By.id("btnMiPerfil")).click();
-        driver.findElement(By.className("perfil-desktop")).click();
-        driver.navigate().to("https://www.disco.com.uy/login");
+        SucursalSeleccionada.selectByValue("4");*/
+        //driver.findElement(By.id("btnConfirmaSucursal")).click();
+
+        //Page 2   Home
+        discoHomePage.clickBtnID("btnMiPerfil");
+        discoHomePage.clickBtnClassName("perfil-desktop");
+        DiscoLoginPage discoLoginPage = discoHomePage.clickOnMiCuenta();
+        //driver.findElement(By.id("btnMiPerfil")).click();
+        //driver.findElement(By.className("perfil-desktop")).click();
+        //driver.navigate().to("https://www.disco.com.uy/login");
         //driver.findElement(By.id("MiPerfil")).click();
         //driver.findElement(By.xpath("//*[@href='/_secure/account']")).click();
         //driver.findElement(By.className("perfil-desktop")).click();
-        driver.findElement(By.id("loginWithUserAndPasswordBtn")).click();
-        driver.findElement(By.id("inputEmail")).sendKeys("grey@disco.com.uy");
-        driver.findElement(By.id("inputPassword")).sendKeys("Internet0.");
-        driver.findElement(By.id("classicLoginBtn")).click();
+
+        //Page 3   Login
+        discoLoginPage.clickBtnID("loginWithUserAndPasswordBtn");
+        discoLoginPage.fillingRegistration();
+        discoLoginPage.clickBtnID("classicLoginBtn");
+
+        //driver.findElement(By.id("loginWithUserAndPasswordBtn")).click();
+        //driver.findElement(By.id("inputEmail")).sendKeys("grey@disco.com.uy");
+        //driver.findElement(By.id("inputPassword")).sendKeys("Internet0.");
+        //driver.findElement(By.id("classicLoginBtn")).click();
     }
     @Test
-    public void Comprar_Disco() throws InterruptedException {
-        Thread.sleep(5000);
-        driver.navigate().to("https://www.disco.com.uy/frescos/frutas-y-verduras");
-        Thread.sleep(5000);
-        JavascriptExecutor jsExecuter = (JavascriptExecutor)driver;
-        jsExecuter.executeScript("window.scrollBy(0,500)");
-        Thread.sleep(5000);
-        //mapa clave-valor de productos agregados a la compra, donde la clave es el nombre del producto y el valor su cantidad
+    public void CompraDisco() throws InterruptedException {
+        DiscoLoginPage discoLoginPage = new DiscoLoginPage(driver);
+        DiscoProductSelection discoProductSelection = discoLoginPage.SelectProducts();
+
+        //Page DiscoProductSelection
+        discoProductSelection.scrollUpDown();
+        discoProductSelection.agregarProductos();
+        discoProductSelection.clickBtnID("btnMiniCart");
+        //Thread.sleep(5000);
+        //driver.navigate().to("https://www.disco.com.uy/frescos/frutas-y-verduras");
+        //Thread.sleep(5000);
+        //JavascriptExecutor jsExecuter = (JavascriptExecutor)driver;
+        //jsExecuter.executeScript("window.scrollBy(0,500)");
+        //Thread.sleep(5000);
+/*        //mapa clave-valor de productos agregados a la compra, donde la clave es el nombre del producto y el valor su cantidad
         Map<String, Integer> itemsSelecList = new HashMap<String, Integer>();
         // lista de productos
         List<WebElement> products = driver.findElements(By.cssSelector("h3.Product-title"));
@@ -74,13 +98,27 @@ public class Disco extends BaseTest {
             addButtons.get(i).click();
             // al final quedaran en este mapa los nombres de productos y cantidades agregados a la compra por si te hace falta saberlos
            itemsSelecList.put(productName, productCount);
-        }
-        driver.findElement(By.id("btnMiniCart")).click();
-        Thread.sleep(1000);
-        driver.findElement(By.id("btn-finalizar-compra")).click();
-        Thread.sleep(1000);
-        driver.findElement(By.id("cart-to-orderform")).click();
-        Thread.sleep(1000);
+        }*/
+        //driver.findElement(By.id("btnMiniCart")).click();
+        //Thread.sleep(1000);
+        //driver.findElement(By.id("btn-finalizar-compra")).click();
+        //Thread.sleep(1000);
+
+        //Page DevotoCheckoutCart
+        DiscoCheckoutCart discoCheckoutCart = discoProductSelection.checkoutCart();
+        //Page DevotoCheckoutProfile
+        DiscoCheckoutProfile discoCheckoutProfile = discoCheckoutCart.checkoutProfile();
+        //Page Finalizar la compra profile
+        discoCheckoutProfile.IdentificationForm();
+        DiscoCheckoutShipping discoCheckoutShipping = discoCheckoutProfile.checkoutShipping();
+        //Page DevotoCheckoutShipping
+        discoCheckoutShipping.clickBtnXpath("//button[@class='btn js-cerrar-mensaje-bolsas']");
+        discoCheckoutShipping.clickBtnClassName("pac-target-input");
+        discoCheckoutShipping.deliveryAddress();
+        DevotoPayment devotoPayment = discoCheckoutShipping.payment();
+        //driver.findElement(By.id("cart-to-orderform")).click();
+        //Thread.sleep(1000);
+        /*
         driver.findElement(By.xpath("//button[@class='btn js-cerrar-mensaje-bolsas']")).click();
         Thread.sleep(3000);
         driver.findElement(By.id("client-first-name")).click();
@@ -96,6 +134,9 @@ public class Disco extends BaseTest {
         cldocument.sendKeys("61732624");
         driver.findElement(By.id("client-phone")).sendKeys("095421236");
         Thread.sleep(1000);
+         */
+
+
         driver.findElement(By.id("go-to-shipping")).click();
         Thread.sleep(1000);
         driver.findElement(By.id("shipping-option-pickup-in-point")).click();
@@ -128,7 +169,7 @@ public class Disco extends BaseTest {
             radioSustituto.click();
         }
         Thread.sleep(5000);
-        driver.findElement(By.xpath("(//*[@id='payment-data-submit'])[2]")).click();
+       // driver.findElement(By.xpath("(//*[@id='payment-data-submit'])[2]")).click();
     }
    /* @AfterMethod
     public void closeDriver() throws InterruptedException {
