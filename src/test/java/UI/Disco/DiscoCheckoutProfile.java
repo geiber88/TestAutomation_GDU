@@ -12,13 +12,19 @@ public class DiscoCheckoutProfile extends BaseUITest {
         driver = remoteDriver;
     }
 
-    public void IdentificationForm(){
+    public void IdentificationForm() throws InterruptedException {
+        Thread.sleep(3000);
         driver.findElement(By.id("client-first-name")).click();
+        Thread.sleep(3000);
         driver.findElement(By.id("client-first-name")).sendKeys("Prueba Web");
+        Thread.sleep(3000);
         driver.findElement(By.id("client-first-name")).sendKeys("Prueba Web");
+        Thread.sleep(3000);
         driver.findElement(By.id("client-last-name")).sendKeys("Soporte");
+        Thread.sleep(3000);
         WebElement cldocument = driver.findElement(By.id("client-document"));
         cldocument.sendKeys("61732624");
+        Thread.sleep(3000);
         driver.findElement(By.id("client-phone")).sendKeys("095421236");
     }
     public DiscoCheckoutShipping checkoutShipping() {

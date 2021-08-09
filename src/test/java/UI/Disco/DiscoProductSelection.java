@@ -33,7 +33,7 @@ public class DiscoProductSelection extends BaseUITest {
         for (int i=0; i< count; i++) {
             String productName = products.get(i).getText();
             // esta seria la cantidad para el producto que se genera aleatorio entre 1 y 10
-            Integer productCount = (int)(Math.random()*(4-2+1)+2);
+            Integer productCount = (int)(Math.random()*(9-7+1)+7);
 
             //Integer productCount;
             for(int j=0; j< productCount; j++){
